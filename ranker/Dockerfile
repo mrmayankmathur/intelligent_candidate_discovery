@@ -25,12 +25,16 @@ FROM python:3.10-slim AS base
 
 # Prevent Python from writing .pyc files and enable unbuffered output.
 # OpenMP env vars prevent FAISS + torch segfault on macOS/Linux.
+# HF_HUB_OFFLINE / TRANSFORMERS_OFFLINE force the embedding model to load from the
+# baked-in local copy (see below) — the ranking step has NO network (--network=none).
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     KMP_DUPLICATE_LIB_OK=TRUE \
     OMP_NUM_THREADS=1 \
     MKL_NUM_THREADS=1 \
-    TOKENIZERS_PARALLELISM=false
+    TOKENIZERS_PARALLELISM=false \
+    HF_HUB_OFFLINE=1 \
+    TRANSFORMERS_OFFLINE=1
 
 WORKDIR /app
 
@@ -51,6 +55,11 @@ COPY ranker/ /app/ranker/
 # These must be generated BEFORE building the image
 # by running: python -m ranker.precompute_all
 COPY ranker/artifacts/ /app/ranker/artifacts/
+
+# ── Bake in the BGE embedding model (offline / --network=none) ─
+# SentenceTransformer("BAAI/bge-small-en-v1.5") resolves this as a
+# local path relative to WORKDIR /app, so no huggingface.co fetch.
+COPY models/bge-small-en-v1.5 /app/BAAI/bge-small-en-v1.5
 
 # ── Create output and data directories ───────────────────────
 RUN mkdir -p /output /data

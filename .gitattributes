@@ -1,0 +1,7 @@
+# Git LFS — large binary artifacts (precomputed index/embeddings + baked model).
+# These are required to reproduce the ranking step offline and exceed GitHub's
+# 100 MB hard limit, so they are stored via LFS.
+*.safetensors filter=lfs diff=lfs merge=lfs -text
+*.npy         filter=lfs diff=lfs merge=lfs -text
+*.index       filter=lfs diff=lfs merge=lfs -text
+*.pkl         filter=lfs diff=lfs merge=lfs -text

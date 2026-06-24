@@ -22,11 +22,11 @@ team_members:
 # ============================================================================
 # Code and reproducibility
 # ============================================================================
-github_repo: "https://github.com/mayankmathur/intelligent_candidate_discovery"
+github_repo: "https://github.com/mrmayankmathur/india_runs_intelligent_candidate_discovery"
 
-sandbox_link: "https://github.com/mayankmathur/intelligent_candidate_discovery/tree/main/webapp"
+sandbox_link: "https://github.com/mrmayankmathur/india_runs_intelligent_candidate_discovery/tree/main/webapp"
 
-reproduce_command: "docker run --rm --memory=16g --network=none -v $(pwd)/dataset:/data:ro -v $(pwd):/output icd-ranker"
+reproduce_command: "docker build -t icd-ranker -f ranker/Dockerfile . && mkdir -p output && docker run --rm --memory=16g --network=none -v $(pwd)/dataset:/data:ro -v $(pwd)/output:/output icd-ranker && python dataset/validate_submission.py output/submission.csv"
 
 # ============================================================================
 # Compute environment
@@ -40,7 +40,7 @@ compute:
   uses_gpu_for_inference: false
   has_network_during_ranking: false
   pre_computation_required: true
-  pre_computation_time_minutes: 15
+  pre_computation_time_minutes: 30
 
 # ============================================================================
 # Approach summary (optional but recommended)

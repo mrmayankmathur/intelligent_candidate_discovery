@@ -16,12 +16,14 @@ dataset/*.npy
 dataset/*.index
 dataset/*.parquet
 
-# Ignore compiled ranking artifacts
-ranker/artifacts/*.npy
-ranker/artifacts/*.index
-ranker/artifacts/*.pkl
-ranker/artifacts/*.parquet
-ranker/artifacts/*.json
+# Compiled ranking artifacts and the baked embedding model are COMMITTED
+# (large binaries go through Git LFS — see .gitattributes) so the Docker image
+# and ranking step reproduce from a fresh clone with --network=none.
+# Keep the smoke/throwaway artifacts out of the repo.
+ranker/artifacts_smoke/
+
+# Scratch output dir for Docker reproduction runs (canonical copy is ./submission.csv)
+output/
 
 # Ignore Java/Kotlin/Gradle build directories
 webapp/.gradle/

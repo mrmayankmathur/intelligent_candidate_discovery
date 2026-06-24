@@ -38,11 +38,11 @@
 - [x] Build interactive UI — React: JD panel, search → ranked cards, profile drawer (career/skills/signals + AI reasoning + match bars), live **Re-run Ranking** console streaming Python logs over SSE
 - [x] Deploy sandbox — single deployable jar (SPA bundled as Spring static); verified e2e on :8080; live re-run ran `ranker.rank` to completion (72s, exit 0) and reproduced a valid `submission.csv`. Engine code untouched.
 
-## Phase 5: Submission Package
-- [ ] Prepare GitHub repo with clean README
-- [ ] Fill `submission_metadata.yaml`
-- [ ] Verify sandbox link works
-- [ ] Final validation + submit
+## Phase 5: Submission Package ✅ COMPLETE
+- [x] Prepare GitHub repo with clean README
+- [x] Fill `submission_metadata.yaml`
+- [x] Verify sandbox link works
+- [x] Final validation + submit
 
 ---
 
