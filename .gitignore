@@ -33,10 +33,6 @@ webapp/bin/
 
 # Ignore IDE specific files
 .idea/
-.vscode/
 *.swp
 .DS_Store
 
-# Antigravity CLI and Claude specific directories
-.antigravitycli/
-.claude/

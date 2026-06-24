@@ -203,10 +203,10 @@ wc -l output/submission.csv   # Should be 101 (header + 100 rows)
 ranker/
 ├── __init__.py                  # Package marker
 ├── config.py                    # Paths, constants, weights, thresholds
-├── rank.py                      # 🎯 Main orchestrator (entry point)
-├── precompute_all.py            # 🏗️ Pre-computation runner
-├── Dockerfile                   # 🐳 Container definition
-├── README.md                    # 📖 This file
+├── rank.py                      # Main orchestrator (entry point)
+├── precompute_all.py            # Pre-computation runner
+├── Dockerfile                   # Container definition
+├── README.md                    # This file
 ├── requirements.txt             # Python dependencies
 │
 ├── artifacts/                   # Pre-computed artifacts
@@ -264,12 +264,12 @@ The final score is a weighted combination of 8 feature categories:
 
 | Constraint | Limit |
 |:---|:---|
-| ⏱ **Wall-clock time** | 5 minutes |
-| 💾 **Memory** | 16 GB RAM |
-| 🖥️ **Compute** | CPU only (no GPU) |
-| 🌐 **Network** | No internet access |
-| 📊 **Input** | 100,000 candidates (~487 MB JSONL) |
-| 📤 **Output** | Top 100 candidates with scores + reasoning |
+| **Wall-clock time** | 5 minutes |
+| **Memory** | 16 GB RAM |
+| **Compute** | CPU only (no GPU) |
+| **Network** | No internet access |
+| **Input** | 100,000 candidates (~487 MB JSONL) |
+| **Output** | Top 100 candidates with scores + reasoning |
 
 Pre-computation (`precompute_all.py`) has **no constraints** — it runs offline with full network and unlimited time.
 
@@ -300,7 +300,7 @@ print('✅ All artifacts consistent')
 
 ---
 
-<p align="center">
+<div style="text-align: center;">
   <strong>Built for the Intelligent Candidate Discovery Hackathon</strong><br/>
   <em>Ranking 100K candidates. 5 minutes. CPU only. No excuses.</em>
-</p>
+</div>

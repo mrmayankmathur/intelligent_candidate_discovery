@@ -9,7 +9,7 @@
 #
 # The Python engine code (ranker/) is mounted/owned read-only at runtime and is never
 # modified. Heavy: the runtime installs torch/faiss/sentence-transformers (~several GB).
-# For a lightweight local demo, prefer `./gradlew :backend:bootRun` (see README-webapp.md).
+# For a lightweight local demo, prefer `./gradlew :backend:bootRun` (see README.md).
 # ─────────────────────────────────────────────────────────────────────────────
 
 # ── Stage 1: build the jar (frontend + backend) ──────────────────────────────

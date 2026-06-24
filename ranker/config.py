@@ -33,7 +33,7 @@ SUBMISSION_CSV = PROJECT_ROOT / "submission.csv"
 # ─── OpenAI (pre-computation only) ──────────────────────────────────────────────
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
-OPENAI_MODEL = "gpt-4o"  # For JD parsing and reasoning generation
+OPENAI_MODEL = "gpt-5"  # For JD parsing and reasoning generation
 
 # ─── Embedding Model ────────────────────────────────────────────────────────────
 

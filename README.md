@@ -2,7 +2,7 @@
 
 A comprehensive, constraint-aware candidate ranking system built for the Redrob Hackathon. This project consists of two separate systems: an offline CPU-based ranking engine, and an interactive web sandbox for the judges.
 
-## Deliverable 1: Ranking Engine (Python)
+## 1: Ranking Engine (Python)
 
 The core ranking engine is designed to run completely offline on a CPU within 5 minutes and under 16GB of RAM. It leverages pre-computed FAISS embeddings (BGE-small-en-v1.5) and a deduplicated BM25 index to perform Reciprocal Rank Fusion (RRF). Aggressive honeypot filtering (5 distinct heuristic checks) removes keyword stuffers and disqualifiers.
 
@@ -14,7 +14,7 @@ The core ranking engine is designed to run completely offline on a CPU within 5 
 ### Setup
 
 ```bash
-git clone <repo-url> && cd intelligent_candidate_discovery
+git clone https://github.com/mrmayankmathur/india_runs_intelligent_candidate_discovery && cd intelligent_candidate_discovery
 git lfs install && git lfs pull        # fetch the precomputed artifacts + baked model
 pip install -r ranker/requirements.txt # only needed for local (non-Docker) runs
 ls dataset/candidates.jsonl            # the 100K-profile input (~487 MB)
@@ -54,7 +54,7 @@ The embedding model is baked into the image (`models/bge-small-en-v1.5/`, with
 
 For local (non-Docker) runs and full flag reference, see [`ranker/README.md`](ranker/README.md).
 
-## Deliverable 2: Web Sandbox & Demo (Java/Spring Boot + Kotlin/JS)
+## 2: Web Sandbox & Demo (Java/Spring Boot + Kotlin/JS)
 
 An interactive visual frontend to explore the ranking engine's output, view candidate profiles, read AI-generated reasoning, and examine the skill match scores.
 
