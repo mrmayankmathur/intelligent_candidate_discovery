@@ -1,5 +1,5 @@
 """
-Main orchestrator for the Intelligent Candidate Discovery ranking pipeline.
+Main orchestrator for the CandIQ.ai ranking pipeline.
 
 Runs the full 4-stage ranking pipeline within contest constraints:
   - 5-minute wall-clock limit
@@ -90,7 +90,7 @@ def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
         prog="ranker.rank",
-        description="Intelligent Candidate Discovery — Ranking Pipeline",
+        description="CandIQ.ai — Ranking Pipeline",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
@@ -417,7 +417,7 @@ def main() -> None:
     pipeline_start = time.perf_counter()
 
     print("=" * 60)
-    print("  🚀 Intelligent Candidate Discovery — Ranking Pipeline")
+    print("  🚀 CandIQ.ai — Ranking Pipeline")
     print("=" * 60)
 
     args = parse_args()

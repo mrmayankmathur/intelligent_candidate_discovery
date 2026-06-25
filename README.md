@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/mrmayankmathur/intelligent_candidate_discovery">
-    <h1>Intelligent Candidate Discovery</h1>
+    <img src="assets/logo.png" alt="CandIQ Logo" width="400" style="margin-bottom: -15px; margin-top: 20px; margin-left: -10px;" />
   </a>
 </div>
 <p align="center">The intelligent, constraint-aware candidate ranking engine.</p>
@@ -12,7 +12,7 @@
 </p>
 
 <p align="justify" style="font-size: 14px;">
-  <strong>Intelligent Candidate Discovery</strong> is an advanced, constraint-aware candidate ranking platform. Designed to operate completely offline under strict compute limits, the core system is a <strong>Python</strong>-based ranking engine that evaluates <strong>100,000</strong>+ candidates locally using pre-computed FAISS vector indexes (BGE-small embeddings) and a deduplicated <strong>BM25</strong> text index. By fusing semantic and keyword retrieval via Reciprocal Rank Fusion (RRF) and passing candidates through a rigorous <strong>5-step</strong> heuristic honeypot filter, the engine successfully isolates highly qualified AI/ML engineers from resume-stuffers. The final top <strong>100</strong> list is surfaced in a polished, interactive Spring Boot and Kotlin/JS web sandbox.
+  <strong>CandIQ.ai</strong> is an advanced, constraint-aware candidate ranking platform. Designed to operate completely offline under strict compute limits, the core system is a <strong>Python</strong>-based ranking engine that evaluates <strong>100,000</strong>+ candidates locally using pre-computed FAISS vector indexes (BGE-small embeddings) and a deduplicated <strong>BM25</strong> text index. By fusing semantic and keyword retrieval via Reciprocal Rank Fusion (RRF) and passing candidates through a rigorous <strong>5-step</strong> heuristic honeypot filter, the engine successfully isolates highly qualified AI/ML engineers from resume-stuffers. The final top <strong>100</strong> list is surfaced in a polished, interactive Spring Boot and Kotlin/JS web sandbox.
 </p>
 
 ### Frontend UI Previews

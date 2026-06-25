@@ -467,7 +467,7 @@ def extract_all_features(
 
 if __name__ == "__main__":
     print("=" * 70)
-    print("  Intelligent Candidate Discovery — Feature Extraction")
+    print("  CandIQ.ai — Feature Extraction")
     print("=" * 70)
     print(f"  Input:  {config.CANDIDATES_JSONL}")
     print(f"  Output: {config.FEATURES_FILE}")

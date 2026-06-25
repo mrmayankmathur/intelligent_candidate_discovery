@@ -1,5 +1,5 @@
 """
-Pre-computation script for Intelligent Candidate Discovery.
+Pre-computation script for CandIQ.ai.
 
 Runs ALL offline artifact generation steps in sequence.
 This script CAN use network access (for downloading the embedding model)
@@ -196,7 +196,7 @@ def main() -> None:
     total_start = time.perf_counter()
 
     print("=" * 60)
-    print("  🏗️  Intelligent Candidate Discovery — Pre-computation")
+    print("  🏗️  CandIQ.ai — Pre-computation")
     print("=" * 60)
 
     args = parse_args()

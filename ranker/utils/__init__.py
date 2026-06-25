@@ -1,1 +1,1 @@
-# Intelligent Candidate Discovery - Utilities
+# CandIQ.ai - Utilities

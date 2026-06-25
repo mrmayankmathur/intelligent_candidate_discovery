@@ -1,1 +1,1 @@
-# Intelligent Candidate Discovery - Pre-computation modules
+# CandIQ.ai - Pre-computation modules

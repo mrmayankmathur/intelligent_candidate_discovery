@@ -1,4 +1,4 @@
-# Intelligent Candidate Discovery - Ranking Engine
+# CandIQ.ai - Ranking Engine
 
 # OpenMP runtime guard — set before any submodule imports faiss / torch.
 # faiss-cpu and torch each bundle their own libomp; on macOS the duplicate

@@ -1,8 +1,8 @@
-# Intelligent Candidate Discovery — Ranking Engine
+# CandIQ.ai — Ranking Engine
 
 > **Given a job description and 100,000 candidate profiles, surface the top 100 best-fit candidates in under 5 minutes — on CPU, with no network access.**
 
-This is the core ranking engine for the Intelligent Candidate Discovery hackathon challenge. It implements a multi-stage retrieval-and-ranking pipeline that combines semantic search, keyword matching, behavioral signal analysis, and rule-based filtering to produce a high-precision ranked list of candidates for any given job description.
+This is the core ranking engine for the CandIQ.ai hackathon challenge. It implements a multi-stage retrieval-and-ranking pipeline that combines semantic search, keyword matching, behavioral signal analysis, and rule-based filtering to produce a high-precision ranked list of candidates for any given job description.
 
 ---
 
@@ -301,6 +301,6 @@ print('✅ All artifacts consistent')
 ---
 
 <div style="text-align: center;">
-  <strong>Built for the Intelligent Candidate Discovery Hackathon</strong><br/>
+  <strong>Built for the CandIQ.ai Hackathon</strong><br/>
   <em>Ranking 100K candidates. 5 minutes. CPU only. No excuses.</em>
 </div>

@@ -1,5 +1,5 @@
 """
-Configuration for the Intelligent Candidate Discovery ranking engine.
+Configuration for the CandIQ.ai ranking engine.
 
 Paths, constants, and tunable parameters for the ranking pipeline.
 """

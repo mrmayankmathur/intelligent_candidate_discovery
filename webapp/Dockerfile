@@ -1,5 +1,5 @@
 # ─────────────────────────────────────────────────────────────────────────────
-# Redrob Intelligent Candidate Discovery — web app (demo sandbox)
+# CandIQ.ai Intelligent Candidate Discovery — web app (demo sandbox)
 #
 # Multi-stage:
 #   1) build  — Gradle builds the Spring Boot jar (this also builds the Kotlin/JS

@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Redrob Intelligent Candidate Discovery — demo web app.
+ * CandIQ.ai Intelligent Candidate Discovery — demo web app.
  *
  * <p>This Spring Boot service is a thin, read-only consumer of the frozen Python ranking engine.
  * It serves the engine's {@code submission.csv} output joined with full candidate profiles from

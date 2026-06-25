@@ -1,5 +1,5 @@
 # ─────────────────────────────────────────────────────────────
-# Intelligent Candidate Discovery — Ranking Engine
+# CandIQ.ai — Ranking Engine
 # ─────────────────────────────────────────────────────────────
 # Reproduces the ranking step in a sandboxed, CPU-only container.
 #

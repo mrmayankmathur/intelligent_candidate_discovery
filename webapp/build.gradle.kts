@@ -1,4 +1,4 @@
-// Root build for the Redrob Intelligent Candidate Discovery web app.
+// Root build for the Redrob CandIQ.ai web app.
 // Two modules:
 //   :backend  — Java 21 + Spring Boot (REST + SSE, orchestrates the frozen Python ranker)
 //   :frontend — Kotlin/JS + React (single-page demo UI)

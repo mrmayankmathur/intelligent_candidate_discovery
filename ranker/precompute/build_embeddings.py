@@ -218,7 +218,7 @@ def main() -> None:
     Full embedding pipeline: compute embeddings → build FAISS index.
     """
     print("=" * 70)
-    print("  Intelligent Candidate Discovery — Embedding Pipeline")
+    print("  CandIQ.ai — Embedding Pipeline")
     print("=" * 70)
     print(f"  Model:  {config.EMBEDDING_MODEL_NAME}")
     print(f"  Input:  {config.CANDIDATES_JSONL}")

@@ -1,1 +1,1 @@
-# Intelligent Candidate Discovery - Pipeline modules
+# CandIQ.ai - Pipeline modules

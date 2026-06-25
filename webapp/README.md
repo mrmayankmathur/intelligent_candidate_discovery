@@ -1,4 +1,4 @@
-# Redrob — Intelligent Candidate Discovery · Web App (Phase 4)
+# CandIQ.ai — Intelligent Candidate Discovery · Web App (Phase 4)
 
 An interactive demo over the **frozen Python ranking engine** (`../ranker`). Judges view the job
 description, browse the engine's ranked shortlist, open full candidate profiles with the AI

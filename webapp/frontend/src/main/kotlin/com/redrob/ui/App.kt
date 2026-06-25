@@ -8,6 +8,7 @@ import react.Props
 import react.create
 import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.img
 import react.dom.html.ReactHTML.span
 import react.useEffectOnce
 import react.useState
@@ -164,41 +165,51 @@ val Header = FC<HeaderProps> { props ->
                 val s = asDynamic()
                 s.display = "flex"
                 s.alignItems = "center"
-                s.gap = "14px"
+                s.gap = "10px"
             }
-            // Logo mark
+            // Logo
+            img {
+                src = "logo.png"
+                alt = "CandIQ Logo"
+                css {
+                    val s = asDynamic()
+                    s.width = "200px"
+                    s.height = "40px"
+                    s.borderRadius = "11px"
+                    s.objectFit = "contain"
+                }
+            }
+            // Divider
             div {
                 css {
                     val s = asDynamic()
-                    s.width = "40px"
-                    s.height = "40px"
-                    s.borderRadius = "11px"
-                    s.background = "linear-gradient(135deg, ${Theme.purple}, ${Theme.blue})"
-                    s.display = "flex"
-                    s.alignItems = "center"
-                    s.justifyContent = "center"
-                    s.fontSize = "20px"
-                    s.boxShadow = "0 4px 12px rgba(99,102,241,0.35)"
+                    s.width = "1px"
+                    s.height = "45px"
+                    s.backgroundColor =
+                        if (props.theme == "light") "#E2E5E9"
+                        else "#212121"
+                    s.margin = "0 6px 0px 8px"
+                    s.flexShrink = 0
                 }
-                +"RC"
             }
             div {
                 css {
                     val s = asDynamic()
                     s.display = "flex"
                     s.flexDirection = "column"
+                    s.gap = "3px"
                 }
                 span {
                     css {
                         val s = asDynamic()
-                        s.fontWeight = "800"
-                        s.fontSize = "24px"
+                        s.fontWeight = "500"
+                        s.fontSize = "20px"
                         s.color = Theme.pageText
                         s.fontFamily = Theme.headingFont
                         s.letterSpacing = "-0.5px"
                         s.lineHeight = "1.1"
                     }
-                    +"Recruiter Copilot"
+                    +"Intelligent Candidate Discovery"
                 }
                 span {
                     css {
@@ -206,7 +217,7 @@ val Header = FC<HeaderProps> { props ->
                         s.fontSize = "12.5px"
                         s.color = Theme.dim
                     }
-                    +"Intelligent candidate discovery · AI-ranked shortlist"
+                    +"AI-ranked Shortlist"
                 }
             }
         }
@@ -227,9 +238,35 @@ val Header = FC<HeaderProps> { props ->
                 val hoverObj = js("{}")
                 hoverObj.background = Theme.borderSoft
                 s["&:hover"] = hoverObj
+                s.userSelect = "none"
+                s.webkitUserSelect = "none"
             }
             onClick = { props.toggleTheme() }
-            +(if (props.theme == "light") "🌙" else "☀️")
+            (if (props.theme == "light") {
+                img {
+                src = "darkToggle.png"
+                alt = "Dark Mode Toggle"
+                css {
+                    val s = asDynamic()
+                    s.width = "20px"
+                    s.height = "20px"
+                    s.borderRadius = "11px"
+                    s.objectFit = "contain"
+                }
+            }
+            } else {
+                img {
+                    src = "lightToggle.png"
+                    alt = "Light Mode Toggle"
+                    css {
+                        val s = asDynamic()
+                        s.width = "20px"
+                        s.height = "20px"
+                        s.borderRadius = "11px"
+                        s.objectFit = "contain"
+                    }
+                }
+            })
         }
     }
 }

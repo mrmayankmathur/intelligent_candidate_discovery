@@ -1,1 +1,1 @@
-# Intelligent Candidate Discovery - Models
+# CandIQ.ai - Models
