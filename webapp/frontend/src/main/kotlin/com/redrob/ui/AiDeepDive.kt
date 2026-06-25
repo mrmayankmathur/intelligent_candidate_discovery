@@ -63,7 +63,7 @@ val AiDeepDive = FC<AiDeepDiveProps> { props ->
         css {
             val s = asDynamic()
             s.marginTop = "14px"
-            s.background = "#0B1120" // deep slate card
+            s.background = "#181818" // neutral dark assessment card
             s.border = "1px solid ${Theme.borderSoft}"
             s.borderRadius = "12px"
             s.padding = "20px"
@@ -100,7 +100,7 @@ val AiDeepDive = FC<AiDeepDiveProps> { props ->
                     s.fontWeight = "700"
                     s.letterSpacing = "0.6px"
                     s.textTransform = "uppercase"
-                    s.color = "#A5B4FC"
+                    s.color = Theme.primary
                     s.fontSize = "12px"
                     s.fontFamily = Theme.bodyFont
                 }

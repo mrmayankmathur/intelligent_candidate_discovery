@@ -38,7 +38,7 @@ val ProfileDrawer = FC<ProfileDrawerProps> { props ->
             val s = asDynamic()
             s.position = "fixed"
             s.top = "0"; s.left = "0"; s.right = "0"; s.bottom = "0"
-            s.background = "rgba(2, 6, 23, 0.8)"
+            s.background = "rgba(15, 15, 15, 0.8)"
             s.backdropFilter = "blur(4px)"
             s.display = "flex"
             s.justifyContent = "flex-end"
