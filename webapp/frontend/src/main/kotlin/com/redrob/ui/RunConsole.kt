@@ -118,9 +118,9 @@ val RunConsole = FC<RunConsoleProps> { props ->
                             s.borderRadius = "50%"
                             s.display = "inline-block"
                             s.background = when (status) {
-                                "done" -> Theme.good
-                                "error" -> Theme.bad
-                                else -> Theme.warn
+                                "done" -> Theme.green
+                                "error" -> Theme.red
+                                else -> Theme.yellow
                             }
                         }
                     }

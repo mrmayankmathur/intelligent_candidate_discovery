@@ -1,30 +1,77 @@
 package com.redrob.ui
 
-/** Color + spacing tokens. Styling is applied via emotion css { asDynamic()... } string properties. */
+import emotion.css.keyframes
+
 object Theme {
-    const val pageText = "#e7e9f3"
-    const val dim = "#9aa0c0"
-    const val faint = "#6b7196"
+    const val bg = "var(--bg-color)"
+    const val card = "var(--surface-color)"
+    const val sidebar = "var(--sidebar-bg)"
+    
+    const val pageText = "var(--text-primary)"
+    const val dim = "var(--text-secondary)"
+    const val faint = "var(--text-faint)"
+    
+    const val border = "var(--border-color)"
+    const val borderSoft = "var(--border-soft)"
+    
+    const val primary = "var(--primary)"
+    const val primaryHover = "var(--primary-hover)"
+    
+    const val green = "var(--success)"
+    const val greenBg = "var(--success-bg)"
+    
+    const val yellow = "var(--warning)"
+    const val yellowBg = "var(--warning-bg)"
+    
+    const val red = "var(--danger)"
+    const val redBg = "var(--danger-bg)"
+    
+    const val blue = "var(--info)"
+    const val blueBg = "var(--info-bg)"
+    
+    const val purple = "var(--purple)"
 
-    const val card = "#13162a"
-    const val card2 = "#171b33"
-    const val raised = "#1d2240"
-    const val border = "#262a47"
-    const val borderSoft = "#20243f"
+    // Fonts
+    const val headingFont = "'Space Grotesk', sans-serif"
+    const val bodyFont = "'Inter', sans-serif"
+    const val mono = "'JetBrains Mono', monospace"
 
-    const val accent = "#7c83ff"
-    const val accent2 = "#22d3ee"
-    const val good = "#34d399"
-    const val warn = "#fbbf24"
-    const val bad = "#f87171"
+    // Helper for fit colors
+    fun fitColor(score: Double): String {
+        return when {
+            score >= 0.8 -> green
+            score >= 0.6 -> yellow
+            else -> red
+        }
+    }
 
-    const val mono = "'JetBrains Mono', ui-monospace, monospace"
+    // Animations (emotion css keyframes)
+    val fadeUp = keyframes {
+        from {
+            asDynamic().opacity = 0
+            asDynamic().transform = "translateY(10px)"
+        }
+        to {
+            asDynamic().opacity = 1
+            asDynamic().transform = "translateY(0)"
+        }
+    }
 
-    /** Color along a green→amber→red scale for a 0..1 fit value. */
-    fun fitColor(v: Double): String = when {
-        v >= 0.75 -> good
-        v >= 0.5 -> "#a3e635"
-        v >= 0.3 -> warn
-        else -> bad
+    val slideInRight = keyframes {
+        from {
+            asDynamic().transform = "translateX(100%)"
+        }
+        to {
+            asDynamic().transform = "translateX(0)"
+        }
+    }
+
+    val pulseGlow = keyframes {
+        from {
+            asDynamic().boxShadow = "0 0 0 0 rgba(79, 70, 229, 0.4)"
+        }
+        to {
+            asDynamic().boxShadow = "0 0 0 10px rgba(79, 70, 229, 0)"
+        }
     }
 }

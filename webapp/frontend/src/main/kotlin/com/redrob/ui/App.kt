@@ -21,12 +21,17 @@ val App = FC<Props> {
     val (searched, setSearched) = useState(false)
     val (selected, setSelected) = useState<String?>(null)
     val (runOpen, setRunOpen) = useState(false)
+    val (theme, setTheme) = useState("light")
 
     useEffectOnce {
         appScope.launch {
             try {
                 setJd(Api.fetchJd())
-                setResults(Api.fetchResults(100))
+                val fetchedResults = Api.fetchResults(100)
+                setResults(fetchedResults)
+                if (fetchedResults.isNotEmpty()) {
+                    setSearched(true)
+                }
             } catch (e: Throwable) {
                 console.error("Failed to load initial data", e)
             }
@@ -34,56 +39,80 @@ val App = FC<Props> {
         }
     }
 
+    val toggleTheme: () -> Unit = {
+        val newTheme = if (theme == "light") "dark" else "light"
+        setTheme(newTheme)
+        kotlinx.browser.document.body?.setAttribute("data-theme", newTheme)
+    }
+
     // ── Page shell ──────────────────────────────────────────────────────────
     div {
         css {
             val s = asDynamic()
-            s.maxWidth = "1320px"
-            s.margin = "0 auto"
-            s.padding = "28px 24px 80px"
+            s.display = "flex"
+            s.minHeight = "100vh"
+            s.background = Theme.bg
         }
 
-        Header {
-            this.count = results.size
-            this.onRerun = { setRunOpen(true) }
-        }
+
 
         div {
             css {
                 val s = asDynamic()
+                s.flex = "1"
+                s.padding = "32px 40px"
                 s.display = "flex"
-                s.gap = "22px"
-                s.alignItems = "flex-start"
-                s.marginTop = "22px"
-                s.flexWrap = "wrap"
+                s.flexDirection = "column"
+                s.width = "100%"
             }
 
-            // Left: job description
+            Header {
+                this.theme = theme
+                this.toggleTheme = toggleTheme
+            }
+
             div {
                 css {
                     val s = asDynamic()
-                    s.flex = "0 0 380px"
-                    s.maxWidth = "380px"
-                    s.position = "sticky"
-                    s.top = "16px"
+                    s.display = "flex"
+                    s.gap = "24px"
+                    s.alignItems = "flex-start"
+                    s.marginTop = "24px"
                 }
-                jd?.let { JdPanel { this.jd = it } }
-            }
 
-            // Right: search + ranked results
-            div {
-                css {
-                    val s = asDynamic()
-                    s.flex = "1 1 560px"
-                    s.minWidth = "320px"
+                // Left: job description
+                div {
+                    css {
+                        val s = asDynamic()
+                        s.flex = "0 0 320px"
+                        s.position = "sticky"
+                        s.top = "24px"
+                    }
+                    jd?.let { 
+                        JdPanel { 
+                            this.jd = it
+                            this.onRerun = {
+                                setSearched(true)
+                                setRunOpen(true)
+                            }
+                        } 
+                    }
                 }
-                ResultsPane {
-                    this.jd = jd
-                    this.results = results
-                    this.loading = loading
-                    this.searched = searched
-                    this.onSearch = { setSearched(true) }
-                    this.onOpen = { id -> setSelected(id) }
+
+                // Right: search + ranked results
+                div {
+                    css {
+                        val s = asDynamic()
+                        s.flex = "1 1 auto"
+                    }
+                    ResultsPane {
+                        this.jd = jd
+                        this.results = results
+                        this.loading = loading
+                        this.searched = searched
+                        this.onSearch = { setSearched(true) }
+                        this.onOpen = { id -> setSelected(id) }
+                    }
                 }
             }
         }
@@ -113,8 +142,8 @@ val App = FC<Props> {
 }
 
 external interface HeaderProps : Props {
-    var count: Int
-    var onRerun: () -> Unit
+    var theme: String
+    var toggleTheme: () -> Unit
 }
 
 val Header = FC<HeaderProps> { props ->
@@ -124,72 +153,81 @@ val Header = FC<HeaderProps> { props ->
             s.display = "flex"
             s.justifyContent = "space-between"
             s.alignItems = "center"
-            s.gap = "16px"
-            s.flexWrap = "wrap"
+            s.marginBottom = "8px"
+            s.paddingBottom = "16px"
+            s.borderBottom = "1px solid ${Theme.borderSoft}"
         }
         div {
+            css {
+                val s = asDynamic()
+                s.display = "flex"
+                s.alignItems = "center"
+                s.gap = "14px"
+            }
+            // Logo mark
+            div {
+                css {
+                    val s = asDynamic()
+                    s.width = "40px"
+                    s.height = "40px"
+                    s.borderRadius = "11px"
+                    s.background = "linear-gradient(135deg, ${Theme.purple}, ${Theme.blue})"
+                    s.display = "flex"
+                    s.alignItems = "center"
+                    s.justifyContent = "center"
+                    s.fontSize = "20px"
+                    s.boxShadow = "0 4px 12px rgba(99,102,241,0.35)"
+                }
+                +"RC"
+            }
             div {
                 css {
                     val s = asDynamic()
                     s.display = "flex"
-                    s.alignItems = "center"
-                    s.gap = "10px"
+                    s.flexDirection = "column"
                 }
                 span {
                     css {
                         val s = asDynamic()
                         s.fontWeight = "800"
-                        s.fontSize = "22px"
-                        s.background = "linear-gradient(90deg, ${Theme.accent}, ${Theme.accent2})"
-                        s.webkitBackgroundClip = "text"
-                        s.backgroundClip = "text"
-                        s.color = "transparent"
+                        s.fontSize = "24px"
+                        s.color = Theme.pageText
+                        s.fontFamily = Theme.headingFont
                         s.letterSpacing = "-0.5px"
+                        s.lineHeight = "1.1"
                     }
-                    +"Redrob"
+                    +"Recruiter Copilot"
                 }
                 span {
                     css {
                         val s = asDynamic()
-                        s.fontSize = "13px"
+                        s.fontSize = "12.5px"
                         s.color = Theme.dim
-                        s.padding = "3px 9px"
-                        s.border = "1px solid ${Theme.border}"
-                        s.borderRadius = "999px"
                     }
-                    +"Intelligent Candidate Discovery"
+                    +"Intelligent candidate discovery · AI-ranked shortlist"
                 }
-            }
-            div {
-                css {
-                    val s = asDynamic()
-                    s.color = Theme.faint
-                    s.fontSize = "13px"
-                    s.marginTop = "6px"
-                }
-                +"Hybrid retrieval · honeypot filtering · weighted scoring — top ${props.count} ranked candidates"
             }
         }
-
-        button {
+        div {
             css {
                 val s = asDynamic()
-                s.display = "inline-flex"
-                s.alignItems = "center"
-                s.gap = "8px"
                 s.cursor = "pointer"
-                s.fontWeight = "600"
-                s.fontSize = "14px"
-                s.color = Theme.pageText
-                s.background = "linear-gradient(90deg, ${Theme.accent}, #5b62e0)"
-                s.border = "none"
-                s.padding = "11px 18px"
-                s.borderRadius = "10px"
-                s.boxShadow = "0 6px 20px rgba(124,131,255,0.35)"
+                s.fontSize = "20px"
+                s.display = "flex"
+                s.alignItems = "center"
+                s.justifyContent = "center"
+                s.width = "40px"
+                s.height = "40px"
+                s.borderRadius = "50%"
+                s.background = Theme.card
+                s.border = "1px solid ${Theme.borderSoft}"
+                s.transition = "all 0.2s"
+                val hoverObj = js("{}")
+                hoverObj.background = Theme.borderSoft
+                s["&:hover"] = hoverObj
             }
-            onClick = { props.onRerun() }
-            span { +"⟳" }
-            +"Re-run Ranking Engine"
+            onClick = { props.toggleTheme() }
+            +(if (props.theme == "light") "🌙" else "☀️")
         }
     }
 }

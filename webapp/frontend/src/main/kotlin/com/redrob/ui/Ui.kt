@@ -23,12 +23,14 @@ val Chip = FC<ChipProps> { props ->
             s.borderRadius = "999px"
             s.whiteSpace = "nowrap"
             if (props.strong) {
-                s.color = Theme.accent2
-                s.background = "rgba(34,211,238,0.10)"
-                s.border = "1px solid rgba(34,211,238,0.35)"
+                s.color = Theme.bg
+                s.background = Theme.blue
+                s.fontWeight = "700"
+                s.border = "none"
             } else {
-                s.color = Theme.dim
-                s.background = Theme.raised
+                s.color = Theme.pageText
+                s.background = Theme.borderSoft
+                s.fontWeight = "600"
                 s.border = "1px solid ${Theme.border}"
             }
         }
@@ -80,9 +82,9 @@ val FitBar = FC<BarProps> { props ->
         div {
             css {
                 val s = asDynamic()
-                s.height = "8px"
+                s.height = "10px"
                 s.width = "100%"
-                s.background = Theme.raised
+                s.background = Theme.borderSoft
                 s.borderRadius = "999px"
                 s.overflow = "hidden"
             }
@@ -93,7 +95,7 @@ val FitBar = FC<BarProps> { props ->
                     s.width = "$pct%"
                     s.borderRadius = "999px"
                     s.background = Theme.fitColor(props.value)
-                    s.transition = "width 0.4s ease"
+                    s.transition = "width 0.6s cubic-bezier(0.22, 1, 0.36, 1)"
                 }
             }
         }
@@ -120,13 +122,13 @@ val SectionLabel = FC<LabelProps> { props ->
     div {
         css {
             val s = asDynamic()
-            s.fontSize = "11px"
-            s.fontWeight = "700"
-            s.letterSpacing = "1.2px"
+            s.fontSize = "12px"
+            s.fontWeight = "800"
+            s.letterSpacing = "1px"
             s.textTransform = "uppercase"
-            s.color = Theme.faint
-            s.marginBottom = "10px"
-            s.marginTop = "18px"
+            s.color = Theme.dim
+            s.marginBottom = "12px"
+            s.marginTop = "24px"
         }
         +props.text
     }

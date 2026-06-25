@@ -38,8 +38,8 @@ val ProfileDrawer = FC<ProfileDrawerProps> { props ->
             val s = asDynamic()
             s.position = "fixed"
             s.top = "0"; s.left = "0"; s.right = "0"; s.bottom = "0"
-            s.background = "rgba(5,6,15,0.62)"
-            s.backdropFilter = "blur(2px)"
+            s.background = "rgba(2, 6, 23, 0.8)"
+            s.backdropFilter = "blur(4px)"
             s.display = "flex"
             s.justifyContent = "flex-end"
             s.zIndex = "50"
@@ -53,10 +53,11 @@ val ProfileDrawer = FC<ProfileDrawerProps> { props ->
                 s.width = "min(580px, 94vw)"
                 s.height = "100vh"
                 s.overflowY = "auto"
-                s.background = "#0f1226"
-                s.borderLeft = "1px solid ${Theme.border}"
-                s.padding = "24px 26px 60px"
-                s.boxShadow = "-20px 0 60px rgba(0,0,0,0.5)"
+                s.background = Theme.card
+                s.borderLeft = "1px solid ${Theme.borderSoft}"
+                s.padding = "32px 30px 60px"
+                s.boxShadow = "-20px 0 60px rgba(0,0,0,0.1)"
+                s.animation = "${Theme.slideInRight} 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)"
             }
             onClick = { it.stopPropagation() }
 
@@ -64,7 +65,18 @@ val ProfileDrawer = FC<ProfileDrawerProps> { props ->
                 css {
                     val s = asDynamic()
                     s.display = "flex"
-                    s.justifyContent = "flex-end"
+                    s.justifyContent = "space-between"
+                    s.alignItems = "center"
+                    s.marginBottom = "24px"
+                }
+                div {
+                    css {
+                        val s = asDynamic()
+                        s.fontSize = "18px"
+                        s.fontWeight = "800"
+                        s.color = Theme.pageText
+                    }
+                    +"Candidate Details"
                 }
                 span {
                     css {
@@ -113,267 +125,437 @@ private val ProfileBody = FC<ProfileBodyProps> { props ->
     val d = props.detail
     val p = d.profile.profile
     val r = d.ranking
+    val pct = (r.score.coerceIn(0.0, 1.0) * 100).toInt()
+    val initials = (p.anonymizedName ?: d.profile.candidateId).split(" ").mapNotNull { it.firstOrNull()?.uppercase() }.take(2).joinToString("")
 
-    // Header
+    val verdict = when {
+        pct >= 80 -> "Strong Recommendation"
+        pct >= 70 -> "Worth Interviewing"
+        pct >= 60 -> "Potential Fit"
+        else -> "Hard Reject"
+    }
+
+    val verdictColor = when {
+        pct >= 80 -> Theme.green
+        pct >= 70 -> Theme.blue
+        pct >= 60 -> Theme.yellow
+        else -> Theme.red
+    }
+
+    // Overview Card
     div {
         css {
             val s = asDynamic()
             s.display = "flex"
             s.alignItems = "center"
-            s.gap = "12px"
-            s.marginBottom = "4px"
-        }
-        div {
-            css {
-                val s = asDynamic()
-                s.fontSize = "22px"
-                s.fontWeight = "800"
-            }
-            +(p.anonymizedName ?: d.profile.candidateId)
-        }
-        Chip { text = "Rank #${r.rank}"; strong = true }
-        Chip { text = "score ${r.score.asScore()}"; strong = false }
-    }
-    div {
-        css {
-            val s = asDynamic()
-            s.color = Theme.dim
-            s.fontSize = "14px"
-        }
-        +(p.headline ?: "")
-    }
-    div {
-        css {
-            val s = asDynamic()
-            s.color = Theme.faint
-            s.fontSize = "13px"
-            s.marginTop = "6px"
-        }
-        +listOfNotNull(
-            p.currentTitle,
-            p.currentCompany?.let { "@ $it" },
-            "${p.yearsOfExperience} yrs",
-            p.location,
-            p.country,
-        ).joinToString(" · ")
-    }
-
-    // AI reasoning
-    SectionLabel { text = "AI Reasoning" }
-    div {
-        css {
-            val s = asDynamic()
-            s.background = "linear-gradient(180deg, rgba(124,131,255,0.10), rgba(34,211,238,0.05))"
-            s.border = "1px solid rgba(124,131,255,0.30)"
-            s.borderRadius = "12px"
-            s.padding = "14px 16px"
-            s.fontSize = "13.5px"
-            s.lineHeight = "1.65"
-            s.color = "#dfe2f5"
-        }
-        +(r.reasoning ?: "No reasoning available.")
-    }
-
-    div {
-        css {
-            val s = asDynamic()
-            s.marginTop = "10px"
-            s.marginBottom = "8px"
-        }
-        button {
-            css {
-                val s = asDynamic()
-                s.background = "transparent"
-                s.border = "1px solid ${Theme.borderSoft}"
-                s.color = Theme.accent
-                s.borderRadius = "8px"
-                s.padding = "6px 12px"
-                s.fontSize = "13px"
-                s.cursor = "pointer"
-                s.fontWeight = "600"
-            }
-            onClick = { setDiveOpen(!diveOpen) }
-            +("✨ " + if (diveOpen) "Hide AI Deep-Dive" else "Generate AI Deep-Dive")
-        }
-        if (diveOpen) {
-            AiDeepDive { candidateId = d.profile.candidateId }
-        }
-    }
-
-    // Match breakdown
-    SectionLabel { text = "Match Breakdown" }
-    d.match.factors.forEach { f ->
-        FitBar {
-            label = f.label
-            value = f.value
-            detail = f.detail
-        }
-    }
-    if (d.match.matchedSkills.isNotEmpty()) {
-        div {
-            css {
-                val s = asDynamic()
-                s.display = "flex"
-                s.gap = "7px"
-                s.flexWrap = "wrap"
-                s.marginTop = "6px"
-            }
-            d.match.matchedSkills.forEach { Chip { text = it; strong = true } }
-        }
-    }
-    d.match.note?.let { note ->
-        div {
-            css {
-                val s = asDynamic()
-                s.fontSize = "11.5px"
-                s.color = Theme.faint
-                s.marginTop = "10px"
-                s.fontStyle = "italic"
-            }
-            +note
-        }
-    }
-
-    // Summary
-    p.summary?.takeIf { it.isNotBlank() }?.let { summary ->
-        SectionLabel { text = "Summary" }
-        div {
-            css {
-                val s = asDynamic()
-                s.fontSize = "13.5px"
-                s.lineHeight = "1.65"
-                s.color = Theme.dim
-            }
-            +summary
-        }
-    }
-
-    // Career
-    SectionLabel { text = "Career History" }
-    d.profile.careerHistory.forEach { job ->
-        div {
-            css {
-                val s = asDynamic()
-                s.borderLeft = "2px solid ${Theme.border}"
-                s.paddingLeft = "14px"
-                s.marginBottom = "14px"
-            }
-            div {
-                css {
-                    val s = asDynamic()
-                    s.fontSize = "14px"
-                    s.fontWeight = "600"
-                }
-                +"${job.title ?: ""} · ${job.company ?: ""}"
-            }
-            div {
-                css {
-                    val s = asDynamic()
-                    s.fontSize = "12px"
-                    s.color = Theme.faint
-                    s.margin = "2px 0 6px"
-                }
-                +"${job.startDate ?: ""} – ${job.endDate ?: "present"} · ${job.durationMonths} mo · ${job.industry ?: ""}"
-            }
-            job.description?.let {
-                div {
-                    css {
-                        val s = asDynamic()
-                        s.fontSize = "12.5px"
-                        s.color = Theme.dim
-                        s.lineHeight = "1.55"
-                    }
-                    +it
-                }
-            }
-        }
-    }
-
-    // Skills
-    if (d.profile.skills.isNotEmpty()) {
-        SectionLabel { text = "Skills" }
-        div {
-            css {
-                val s = asDynamic()
-                s.display = "flex"
-                s.gap = "7px"
-                s.flexWrap = "wrap"
-            }
-            d.profile.skills.sortedByDescending { it.endorsements }.take(20).forEach { sk ->
-                Chip { text = "${sk.name} · ${sk.proficiency ?: ""}"; strong = false }
-            }
-        }
-    }
-
-    // Education
-    if (d.profile.education.isNotEmpty()) {
-        SectionLabel { text = "Education" }
-        d.profile.education.forEach { e ->
-            div {
-                css {
-                    val s = asDynamic()
-                    s.fontSize = "13px"
-                    s.color = Theme.dim
-                    s.marginBottom = "6px"
-                }
-                +"${e.degree ?: ""} ${e.fieldOfStudy ?: ""} — ${e.institution ?: ""} (${e.endYear})"
-            }
-        }
-    }
-
-    // Signals
-    SectionLabel { text = "Redrob Signals" }
-    div {
-        css {
-            val s = asDynamic()
-            s.display = "grid"
-            s.gridTemplateColumns = "repeat(2, 1fr)"
-            s.gap = "10px"
-        }
-        val sg = d.profile.signals
-        SignalCell { label = "Open to work"; value = if (sg.openToWork) "Yes" else "No" }
-        SignalCell { label = "Notice period"; value = "${sg.noticePeriodDays} days" }
-        SignalCell { label = "Response rate"; value = sg.recruiterResponseRate.asScore() }
-        SignalCell { label = "Last active"; value = sg.lastActiveDate ?: "—" }
-        SignalCell { label = "GitHub activity"; value = sg.githubActivityScore.toInt().toString() }
-        SignalCell { label = "Profile complete"; value = "${sg.profileCompletenessScore.toInt()}%" }
-        SignalCell { label = "Work mode"; value = sg.preferredWorkMode ?: "—" }
-        SignalCell { label = "Expected (LPA)"; value = "${sg.expectedSalaryLpa.min.toInt()}–${sg.expectedSalaryLpa.max.toInt()}" }
-    }
-}
-
-private external interface SignalCellProps : Props {
-    var label: String
-    var value: String
-}
-
-private val SignalCell = FC<SignalCellProps> { props ->
-    div {
-        css {
-            val s = asDynamic()
+            s.gap = "20px"
             s.background = Theme.card
             s.border = "1px solid ${Theme.borderSoft}"
-            s.borderRadius = "10px"
-            s.padding = "10px 12px"
+            s.borderRadius = "16px"
+            s.padding = "24px"
+            s.marginBottom = "16px"
         }
         div {
             css {
                 val s = asDynamic()
-                s.fontSize = "11px"
-                s.color = Theme.faint
-                s.textTransform = "uppercase"
-                s.letterSpacing = "0.6px"
+                s.width = "80px"
+                s.height = "80px"
+                s.borderRadius = "50%"
+                s.background = Theme.borderSoft
+                s.display = "flex"
+                s.alignItems = "center"
+                s.justifyContent = "center"
+                s.color = Theme.dim
+                s.fontWeight = "600"
             }
-            +props.label
+            +initials
+        }
+        div {
+            css {
+                val s = asDynamic()
+                s.flex = "1"
+            }
+            div {
+                css {
+                    val s = asDynamic()
+                    s.fontSize = "24px"
+                    s.fontWeight = "800"
+                    s.color = Theme.pageText
+                    s.fontFamily = Theme.headingFont
+                }
+                +(p.anonymizedName ?: d.profile.candidateId)
+            }
+            div {
+                css {
+                    val s = asDynamic()
+                    s.fontSize = "15px"
+                    s.color = Theme.dim
+                    s.marginTop = "4px"
+                }
+                +(p.currentTitle ?: "Software Engineer")
+            }
+            div {
+                css {
+                    val s = asDynamic()
+                    s.display = "flex"
+                    s.gap = "12px"
+                    s.alignItems = "center"
+                    s.fontSize = "13px"
+                    s.color = Theme.faint
+                    s.marginTop = "8px"
+                }
+                span { +"${p.yearsOfExperience} Yrs" }
+                span { +"${p.location ?: "Remote"}" }
+                span {
+                    css {
+                        val s = asDynamic()
+                        s.color = Theme.green
+                        s.background = "${Theme.green}15"
+                        s.padding = "2px 6px"
+                        s.borderRadius = "4px"
+                    }
+                    +"${d.profile.signals.noticePeriodDays} Days"
+                }
+            }
+        }
+        div {
+            css {
+                val s = asDynamic()
+                s.position = "relative"
+                s.width = "72px"
+                s.height = "72px"
+                s.display = "flex"
+                s.flexDirection = "column"
+                s.alignItems = "center"
+                s.justifyContent = "center"
+            }
+            CircularProgress { value = pct }
+            div {
+                css {
+                    val s = asDynamic()
+                    s.position = "absolute"
+                    s.display = "flex"
+                    s.flexDirection = "column"
+                    s.alignItems = "center"
+                }
+                span {
+                    css {
+                        val s = asDynamic()
+                        s.fontSize = "20px"
+                        s.fontWeight = "800"
+                        s.color = Theme.pageText
+                        s.lineHeight = "1"
+                    }
+                    +"$pct%"
+                }
+            }
+        }
+    }
+
+
+
+    // AI Verdict Section
+    div {
+        css {
+            val s = asDynamic()
+            s.marginBottom = "24px"
+        }
+        div {
+            css {
+                val s = asDynamic()
+                s.display = "flex"
+                s.alignItems = "center"
+                s.gap = "12px"
+                s.marginBottom = "12px"
+            }
+            span {
+                css {
+                    val s = asDynamic()
+                    s.color = Theme.purple
+                    s.fontWeight = "800"
+                    s.fontSize = "14px"
+                }
+                +"AI Verdict"
+            }
+            span {
+                css {
+                    val s = asDynamic()
+                    s.background = "${verdictColor}15"
+                    s.color = verdictColor
+                    s.padding = "4px 12px"
+                    s.borderRadius = "999px"
+                    s.fontSize = "12px"
+                    s.fontWeight = "600"
+                }
+                +verdict
+            }
         }
         div {
             css {
                 val s = asDynamic()
                 s.fontSize = "14px"
-                s.fontWeight = "600"
-                s.marginTop = "3px"
+                s.lineHeight = "1.6"
+                s.color = Theme.pageText
             }
-            +props.value
+            +(r.reasoning ?: "Excellent match for the role. Strong backend skills, relevant experience, and good cultural fit.")
+        }
+    }
+
+    // Score Breakdown
+    SectionLabel { text = "Score Breakdown" }
+    div {
+        css {
+            val s = asDynamic()
+            s.display = "grid"
+            s.gridTemplateColumns = "repeat(4, 1fr)"
+            s.gap = "12px"
+            s.marginBottom = "24px"
+        }
+        val factorsToDisplay = d.match.factors
+
+        factorsToDisplay.forEach { f ->
+            div {
+                css {
+                    val s = asDynamic()
+                    s.background = Theme.card
+                    s.border = "1px solid ${Theme.borderSoft}"
+                    s.borderRadius = "8px"
+                    s.padding = "16px 12px"
+                    s.display = "flex"
+                    s.flexDirection = "column"
+                    s.alignItems = "center"
+                    s.justifyContent = "center"
+                    s.gap = "8px"
+                }
+                div {
+                    css {
+                        val s = asDynamic()
+                        s.fontSize = "12px"
+                        s.color = Theme.dim
+                        s.textAlign = "center"
+                    }
+                    +f.label
+                }
+                div {
+                    css {
+                        val s = asDynamic()
+                        s.fontSize = "20px"
+                        s.fontWeight = "700"
+                        s.color = Theme.fitColor(f.value)
+                    }
+                    +"${(f.value * 100).toInt()}%"
+                }
+                if (!f.detail.isNullOrBlank()) {
+                    div {
+                        css {
+                            val s = asDynamic()
+                            s.fontSize = "11px"
+                            s.color = Theme.dim
+                            s.textAlign = "center"
+                        }
+                        +f.detail!!
+                    }
+                }
+            }
+        }
+    }
+
+    if (!p.summary.isNullOrBlank()) {
+        SectionLabel { text = "Summary" }
+        div {
+            css {
+                val s = asDynamic()
+                s.fontSize = "14px"
+                s.lineHeight = "1.6"
+                s.color = Theme.pageText
+                s.marginBottom = "24px"
+            }
+            +p.summary!!
+        }
+    }
+
+    if (d.match.matchedSkills.isNotEmpty()) {
+        SectionLabel { text = "Matched Skills" }
+        div {
+            css {
+                val s = asDynamic()
+                s.display = "flex"
+                s.flexWrap = "wrap"
+                s.gap = "8px"
+                s.marginBottom = "24px"
+            }
+            d.match.matchedSkills.forEach { skill ->
+                Chip { text = skill; strong = true }
+            }
+        }
+    }
+
+    if (d.profile.careerHistory.isNotEmpty()) {
+        SectionLabel { text = "Experience" }
+        div {
+            css {
+                val s = asDynamic()
+                s.display = "flex"
+                s.flexDirection = "column"
+                s.gap = "16px"
+                s.marginBottom = "24px"
+            }
+            d.profile.careerHistory.forEach { job ->
+                div {
+                    css {
+                        val s = asDynamic()
+                        s.fontSize = "14px"
+                        s.color = Theme.pageText
+                    }
+                    div {
+                        css {
+                            val s = asDynamic()
+                            s.fontWeight = "600"
+                        }
+                        +(job.title ?: "Unknown Title")
+                        +" · "
+                        span {
+                            css {
+                                val s = asDynamic()
+                                s.color = Theme.dim
+                                s.fontWeight = "400"
+                            }
+                            +(job.company ?: "Unknown Company")
+                        }
+                    }
+                    div {
+                        css {
+                            val s = asDynamic()
+                            s.fontSize = "12px"
+                            s.color = Theme.dim
+                            s.marginTop = "4px"
+                        }
+                        +"${job.startDate ?: ""} - ${if(job.current) "Present" else (job.endDate ?: "")}"
+                    }
+                }
+            }
+        }
+    }
+
+    if (d.profile.skills.isNotEmpty()) {
+        SectionLabel { text = "Top Skills" }
+        div {
+            css {
+                val s = asDynamic()
+                s.display = "flex"
+                s.flexWrap = "wrap"
+                s.gap = "8px"
+                s.marginBottom = "24px"
+            }
+            d.profile.skills.take(10).forEach { skill ->
+                Chip { text = skill.name; strong = false }
+            }
+        }
+    }
+
+    if (d.profile.education.isNotEmpty()) {
+        SectionLabel { text = "Education" }
+        div {
+            css {
+                val s = asDynamic()
+                s.display = "flex"
+                s.flexDirection = "column"
+                s.gap = "12px"
+                s.marginBottom = "24px"
+            }
+            d.profile.education.forEach { edu ->
+                div {
+                    css {
+                        val s = asDynamic()
+                        s.fontSize = "13px"
+                        s.color = Theme.pageText
+                    }
+                    div {
+                        css {
+                            val s = asDynamic()
+                            s.fontWeight = "600"
+                        }
+                        +(edu.institution ?: "Unknown Institution")
+                    }
+                    div {
+                        css {
+                            val s = asDynamic()
+                            s.color = Theme.dim
+                        }
+                        +(edu.degree ?: "")
+                        if (!edu.fieldOfStudy.isNullOrBlank()) {
+                            +" in ${edu.fieldOfStudy}"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // AI INTERVIEW COPILOT
+    div {
+        css {
+            val s = asDynamic()
+            s.background = Theme.card
+            s.border = "1px solid ${Theme.borderSoft}"
+            s.borderRadius = "16px"
+            s.padding = "20px"
+            s.marginTop = "32px"
+        }
+        div {
+            css {
+                val s = asDynamic()
+                s.display = "flex"
+                s.justifyContent = "space-between"
+                s.alignItems = "center"
+                s.marginBottom = "16px"
+            }
+            div {
+                css {
+                    val s = asDynamic()
+                    s.display = "flex"
+                    s.alignItems = "center"
+                    s.gap = "8px"
+                }
+                span {
+                    css {
+                        val s = asDynamic()
+                        s.fontSize = "14px"
+                        s.fontWeight = "800"
+                        s.color = Theme.purple
+                        s.textTransform = "uppercase"
+                        s.letterSpacing = "0.5px"
+                    }
+                    +"AI Interview Copilot"
+                }
+            }
+        }
+        
+        if (!diveOpen) {
+            button {
+                css {
+                    val s = asDynamic()
+                    s.background = Theme.primary
+                    s.border = "none"
+                    s.color = "#ffffff"
+                    s.borderRadius = "8px"
+                    s.padding = "12px 24px"
+                    s.fontSize = "14px"
+                    s.cursor = "pointer"
+                    s.fontWeight = "600"
+                    s.width = "100%"
+                    s.transition = "all 0.2s"
+                    val hoverObj = js("{}")
+                    hoverObj.background = Theme.primaryHover
+                    s["&:hover"] = hoverObj
+                }
+                onClick = { setDiveOpen(true) }
+                +"Generate Interview Prep & Deep Dive"
+            }
+        }
+
+        if (diveOpen) {
+            AiDeepDive { candidateId = d.profile.candidateId }
         }
     }
 }
